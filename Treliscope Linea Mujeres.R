@@ -12,9 +12,12 @@ library(readxl)
 library(readr)
 library(trelliscopejs)
 library(forecast)
-####Importar documento desde googleDRIVE
+####Importar base de datos csv
 library(readr)
-#hola
+file.choose()#buscar ruta del archivo csv
+ruta_csv <-"C:\\Users\\Miroslava\\Documents\\GitHub\\MiPrimerRepositorioIRC\\servicios_integrales_2019-2021.csv"
+servicios_integrales_2019_2021<-read_csv(ruta_csv)
+
 
 
 
