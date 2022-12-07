@@ -96,10 +96,95 @@ denuncias_victimas_pgj_hf
 # #####no sale da error 
 
 
+
+# ********************Ensayo nuevo forecast INICIO BUENO BUENO JA
+
+#Filtro de año 2019
+#Comentario q sirve por si quiero Modificar fecha ,fechahecho>="2019-08-01", fechahecho<="2019-08-31"
+denuncias_desde2018<-denuncias_victimas_pgj_hf %>% 
+  filter(delito=="VIOLENCIA FAMILIAR", ao>="2018") %>% 
+  group_by(fechahecho) %>% 
+  arrange(fechahecho) 
+
+denuncias_desde2018
+
+denuncias_diacdmx<-denuncias_desde2018 %>%
+  group_by(fechahecho) %>%
+  arrange(fechahecho) %>% 
+  count(fechahecho, sort = TRUE) %>%
+  mutate(denunciasdcdmx=n) 
+
+denuncias_diacdmx
+
+
+denuncias_mescdmx<-denuncias_diacdmx %>% 
+  mutate(mes=format(fechahecho, "%m"),año=format(fechahecho, "%Y"))%>% 
+  group_by(año,mes) %>%
+  arrange(año) %>% 
+  summarise(denuncias= sum(n) )
+
+
+denuncias_mescdmx
+
+############## SERIE TEMPORAL
+Y<-ts(denuncias_mescdmx$denuncias, start=c(2018,1), frequency = 12)
+Y
+
+frequency(Y)
+############## EXPLORACIÓN DE LOS DATOS
+autoplot(Y)+
+  labs(title="No. de denuncias por violencia familiar realizadas en cdmx 2018-2019",
+       x="\r\nFecha de denuncia", 
+       y= "\r\nNúmero de denuncias recibidas por mes")
+
+
+############# estacionalidad  de la serie
+
+descom= decompose(Y) #Ocurre un error en descompose puesto que el número de observaciones es menor a 24 es decir los dosperiodos requeridos
+
+autoplot(descom)
+acf(Y)
+pacf(Y)
+
+
+
+######### Revisar las diferencias de la serie
+DY <-diff(Y)
+
+############# observar las diferencias
+
+autoplot(DY)+
+  labs(Title="No. de denuncias por violencia familiar realizadas en cdmx 2018-2019",
+       x="\r\nFecha de denuncia", 
+       y= "\r\nNúmero de denuncias recibidas por mes")
+
+############# Elaboración de modelo ARIMA
+modelo_arima <- auto.arima(Y,d=1, D=1, stepwise= FALSE, approximation=FALSE, trace= TRUE)
+print(modelo_arima) #Modelo que más se ajusta a los datos, revisó 61 combinaciones para ver cuál se ajustaba más a los datos
+
+
+####### Realizamos una revision de los residuos del modelo
+checkresiduals(modelo_arima)
+
+####### Se calcula el forecast de llamadas para próximos 6 meses
+fcst <- forecast(modelo_arima, h=12, level= c(95))
+autoplot(fcst)+
+  labs(title="No. de denuncias por violencia familiar realizadas en cdmx 2018-2019 \r\n para los próximos doce meses
+       ",
+       x="\r\nFecha de denuncia", 
+       y= "\r\nNúmero de denuncias recibidas por mes")
+
+
+
+# ********************Ensayo nuevo forecast FIN
+
+
+
+
 #Filtro de año
 #Comentario q sirve por si quiero Modificar fecha ,fechahecho>="2019-08-01", fechahecho<="2019-08-31"
 denuncias_dia<-denuncias_victimas_pgj_hf %>% 
-  filter(delito=="VIOLENCIA FAMILIAR", ao>="2019") %>% 
+  filter(delito=="VIOLENCIA FAMILIAR", ao>="2018") %>% 
   group_by(fechahecho) %>% 
   count(fechahecho, sort = TRUE) %>%
   arrange(fechahecho) %>%
