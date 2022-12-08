@@ -80,8 +80,7 @@ autoplot(Y)+
 
 ############# estacionalidad  de la serie
 
-descom= decompose(Y) #Ocurre un error en descompose puesto que el número de observaciones es menor a 24 es decir los dosperiodos requeridos
-
+descom= decompose(Y) 
 autoplot(descom)
 acf(Y)
 pacf(Y)
@@ -117,3 +116,51 @@ autoplot(fcst)+
 
 
 # ********************Ensayo nuevo forecast FIN
+
+
+# *************INICIO trelliscope por dia
+denuncias_victimas_fgj_c %>% 
+  filter(Delito=="VIOLENCIA FAMILIAR") %>% 
+  group_by(FechaInicio, alcaldia_hechos) %>% 
+  count(FechaInicio, sort = TRUE) %>%
+  summarise(m=n)%>%
+  ggplot(aes(FechaInicio, m,))+
+  geom_point(size = 0.3) +
+  geom_smooth(se=FALSE, span=1) +
+  labs(title="No. de denuncias por violencia familiar realizadas en cdmx 2019-2022 \r\n para los próximos doce meses
+       ",
+       x="\r\nFecha de denuncia", 
+       y= "\r\nNúmero de denuncias recibidas por mes")+
+  facet_trelliscope(
+    ~alcaldia_hechos,
+    ncol = 2,
+    nrow = 2,
+    
+    as_plotly = TRUE)
+
+# *************fin trelliscopepor dia
+
+
+
+# *************INICIO trelliscope por mes*** se ve más claro
+denuncias_victimas_fgj_c %>% 
+  filter(Delito=="VIOLENCIA FAMILIAR") %>% 
+  group_by(mes=floor_date(FechaInicio, unit = "month"), alcaldia_hechos) %>% 
+  count(mes, sort = TRUE) %>%
+  summarise(m=n)%>%
+  ggplot(aes(mes, m,))+
+  theme_grey()+
+  geom_point(size = 0.3) +
+  geom_smooth(se=FALSE, span=1) +
+  labs(title="Denuncias de violencia familiar \r\n  FGJ 2019-2022
+       ",
+       x="Fecha de denuncia", 
+       y= "\r\n Número de denuncias recibidas por mes")+
+  facet_trelliscope(
+    ~alcaldia_hechos,
+    ncol = 2,
+    nrow = 2,
+    
+    as_plotly = TRUE)
+
+# *************FIN trelliscope por mes*** se ve más claro
