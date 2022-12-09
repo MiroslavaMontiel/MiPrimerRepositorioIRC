@@ -83,3 +83,25 @@ autoplot(fcst)+
        x="\r\nFecha de llamada", 
        y= "\r\nNúmero de llamdas recibidas por mes")
 
+# *************INICIO mapa de árbol por alcaldía 2022**
+head(servicios_integrales_2019_2021)
+
+lm2021 <- servicios_integrales_2019_2021 %>% 
+  filter(estado_usuaria=="CIUDAD DE MÉXICO", año_alta==2021) %>%
+  group_by(municipio_usuaria) %>%
+  count(año_alta, sort = TRUE) %>%
+  summarise(llamadas_totales=n) %>% 
+  arrange(-llamadas_totales) %>%
+  mutate(parents = "Llamadas a línea Mujeres 2021") %>%
+  ungroup() 
+
+plot_ly(data = lm2021,
+        type= "treemap",
+        values = ~llamadas_totales,
+        labels= ~ municipio_usuaria,
+        parents=  ~parents,
+        domain = list(column=0),
+        name = "Llamadas a línea Mujeres 2021",
+        textinfo="label+value+percent parent")
+
+# *************FIN mapa de árbol por alcaldía 2022**

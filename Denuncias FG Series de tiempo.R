@@ -13,6 +13,7 @@ library(readr)
 library(trelliscopejs)
 library(forecast)
 library(lubridate)
+library(tidyr)
 ####Importar base de datos csv
 library(readr)
 file.choose()#buscar ruta del archivo csv
@@ -164,3 +165,42 @@ denuncias_victimas_fgj_c %>%
     as_plotly = TRUE)
 
 # *************FIN trelliscope por mes*** se ve más claro
+
+
+
+
+# *************INICIO mapa de árbol por alcaldía 2022**
+
+
+dvf2022 <- denuncias_victimas_fgj_c %>% 
+  filter(Delito=="VIOLENCIA FAMILIAR", Año_inicio==2022) %>%
+  group_by(alcaldia_hechos) %>%
+  count(Año_inicio, sort = TRUE) %>%
+  summarise(denuncias_totales=n) %>% 
+  arrange(-denuncias_totales) %>%
+  mutate(parents = "Denuncias 2022") %>%
+  ungroup() 
+
+plot_ly(data = dvf2022,
+        type= "treemap",
+        values = ~denuncias_totales,
+        labels= ~ alcaldia_hechos,
+        parents=  ~parents,
+        domain = list(column=0),
+        name = "Denuncias por Violencia Familiar 2022",
+        textinfo="label+value+percent parent")
+
+# *************FIN mapa de árbol por alcaldía 2022**
+
+
+
+
+
+
+
+
+
+
+
+
+
