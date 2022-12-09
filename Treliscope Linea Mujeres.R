@@ -23,10 +23,10 @@ servicios_integrales_2019_2021<-read_csv(ruta_csv)
 
 servicios_integrales_2019_2021 %>% 
   filter(estado_usuaria=="CIUDAD DE MÉXICO") %>% 
-  group_by(fecha_alta, municipio_usuaria) %>% 
+  group_by(mes=floor_date(fecha_alta, unit = "month"), municipio_usuaria) %>% 
   count(municipio_usuaria, sort = TRUE) %>%
   summarise(m=n)%>%
-  ggplot(aes(fecha_alta, m,))+
+  ggplot(aes(mes, m,))+
   geom_point(size = 0.3) +
   geom_smooth(se=FALSE, span=1) +
   labs(title="No. de llamadas realizadas a Línea Mujeres agrupadas por Alcaldía \r\n 2019-2021
@@ -39,3 +39,5 @@ servicios_integrales_2019_2021 %>%
     nrow = 2,
     
     as_plotly = TRUE)
+
+
