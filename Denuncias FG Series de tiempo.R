@@ -143,7 +143,7 @@ denuncias_victimas_fgj_c %>%
 
 
 
-# *************INICIO trelliscope por mes*** se ve más claro
+# *************INICIO trelliscope VIOLENCIA FAMILIAR por mes*** se ve TENDENCIA A LA BAJA EN PANDEMIA
 denuncias_victimas_fgj_c %>% 
   filter(Delito=="VIOLENCIA FAMILIAR") %>% 
   group_by(mes=floor_date(FechaInicio, unit = "month"), alcaldia_hechos) %>% 
@@ -164,7 +164,7 @@ denuncias_victimas_fgj_c %>%
     
     as_plotly = TRUE)
 
-# *************FIN trelliscope por mes*** se ve más claro
+# *************FIN trelliscope VIOLENCIA FAMILIAR por mes*** 
 
 
 
@@ -195,7 +195,27 @@ plot_ly(data = dvf2022,
 
 
 
+# *************INICIO trelliscope TOTAL DENUNCIAS por mes*** se ve TENDENCIA A LA BAJA EN PANDEMIA
+denuncias_victimas_fgj_c %>%  
+  group_by(mes=floor_date(FechaInicio, unit = "month"), alcaldia_hechos) %>% 
+  count(mes, sort = TRUE) %>%
+  summarise(m=n)%>%
+  ggplot(aes(mes, m,))+
+  theme_grey()+
+  geom_point(size = 0.3) +
+  geom_smooth(se=FALSE, span=1) +
+  labs(title="Denuncias de totales \r\n  FGJ 2019-2022
+       ",
+       x="Fecha de denuncia", 
+       y= "\r\n Número de denuncias recibidas por mes")+
+  facet_trelliscope(
+    ~alcaldia_hechos,
+    ncol = 2,
+    nrow = 2,
+    
+    as_plotly = TRUE)
 
+# *************FIN trelliscope VIOLENCIA FAMILIAR por mes*** se ve más claro
 
 
 
