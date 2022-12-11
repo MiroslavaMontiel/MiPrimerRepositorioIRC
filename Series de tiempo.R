@@ -105,3 +105,52 @@ plot_ly(data = lm2021,
         textinfo="label+value+percent parent")
 
 # *************FIN mapa de árbol por alcaldía 2022**
+# *************INICIO mapa de árbol por tematica 1 marzo 2020**
+head(servicios_integrales_2019_2021)
+
+lm2021 <- servicios_integrales_2019_2021 %>% 
+  filter(estado_usuaria=="CIUDAD DE MÉXICO", año_alta==2020, mes_alta=="Abril") %>%
+  group_by(tematica_1) %>%
+  count(año_alta, sort = TRUE) %>%
+  summarise(llamadas_totales=n) %>% 
+  arrange(-llamadas_totales) %>%
+  mutate(parents = "Llamadas a línea Mujeres 2021") %>%
+  ungroup() 
+
+plot_ly(data = lm2021,
+        type= "treemap",
+        values = ~llamadas_totales,
+        labels= ~ tematica_1,
+        parents=  ~parents,
+        domain = list(column=0),
+        name = "Llamadas a línea Mujeres 2021",
+        textinfo="label+value+percent parent")
+
+# *************FIN mapa  mapa de árbol por tematica 1 marzo 2020**
+
+
+# *************INICIO mapa de árbol por tematica 2 marzo 2020**
+head(servicios_integrales_2019_2021)
+
+lm2021 <- servicios_integrales_2019_2021 %>% 
+  filter(estado_usuaria=="CIUDAD DE MÉXICO", año_alta==2020, mes_alta=="Marzo") %>%
+  group_by(tematica_2) %>%
+  count(año_alta, sort = TRUE) %>%
+  summarise(llamadas_totales=n) %>% 
+  arrange(-llamadas_totales) %>%
+  mutate(parents = "Llamadas a línea Mujeres 2021") %>%
+  ungroup() 
+
+plot_ly(data = lm2021,
+        type= "treemap",
+        values = ~llamadas_totales,
+        labels= ~ tematica_2,
+        parents=  ~parents,
+        domain = list(column=0),
+        name = "Llamadas a línea Mujeres 2021",
+        textinfo="label+value+percent parent")
+
+# *************FIN mapa  mapa de árbol por tematica 2 marzo 2020**
+
+
+
