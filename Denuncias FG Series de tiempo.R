@@ -106,14 +106,13 @@ print(modelo_arima) #Modelo que más se ajusta a los datos, revisó 61 combinaci
 ####### Realizamos una revision de los residuos del modelo
 checkresiduals(modelo_arima)
 
-####### Se calcula el forecast de llamadas para próximos 6 meses
+####### Se calcula el forecast de denuncias para el próximo año
 fcst <- forecast(modelo_arima, h=12, level= c(95))
 autoplot(fcst)+
   labs(title="No. de denuncias por violencia familiar realizadas en cdmx 2019-2022 \r\n para los próximos doce meses
        ",
        x="\r\nFecha de denuncia", 
        y= "\r\nNúmero de denuncias recibidas por mes")
-
 
 
 # ********************Ensayo nuevo forecast FIN
@@ -192,7 +191,28 @@ plot_ly(data = dvf2022,
 
 # *************FIN mapa de árbol por alcaldía 2022**
 
+# *************INICIO mapa de árbol por alcaldía total**
 
+
+dvf2022 <- denuncias_victimas_fgj_c %>% 
+  filter(Delito=="VIOLENCIA FAMILIAR", Año_inicio>=2019) %>%
+  group_by(alcaldia_hechos) %>%
+  count(Delito, sort = TRUE) %>%
+  summarise(denuncias_totales=n) %>% 
+  arrange(-denuncias_totales) %>%
+  mutate(parents = "Denuncias por Violencia Familiar totales") %>%
+  ungroup() 
+
+plot_ly(data = dvf2022,
+        type= "treemap",
+        values = ~denuncias_totales,
+        labels= ~ alcaldia_hechos,
+        parents=  ~parents,
+        domain = list(column=0),
+        name = "Denuncias por Violencia Familiar totales",
+        textinfo="label+value+percent parent")
+
+# *************FIN mapa de árbol por alcaldía total**
 
 
 # *************INICIO trelliscope TOTAL DENUNCIAS por mes*** se ve TENDENCIA A LA BAJA EN PANDEMIA

@@ -101,9 +101,17 @@ g1<-ggplot(V_n,aes(x="", y=porcentaje, fill=P12_7))+
 g1
 
 # *****************************************Plotly 1 INICIO
+colors_list <- list(
+  "si" = "#EE6363",
+  "no" = "#FFFFE0")
+
+V_n$color <- dplyr::recode(V_n$P12_7, !!!colors_list)
+
+# , opacity = rep(0.7, 7)))  
 
 p1 <- plot_ly(data = V_n, labels = ~P12_7, values = ~n, type = 'pie',textinfo = "label+percent",
-              insidetextorientation = "radial")  %>% layout(title = 'Mujeres que insultan a sus hijos, ¿sufrieron insultos en su niñez?')
+              insidetextorientation = "radial", marker = list( colors = ~color))%>%
+  layout(title = 'Mujeres que insultan a sus hijos, ¿sufrieron insultos en su niñez?')
 
 p1
 
@@ -190,24 +198,36 @@ g3<-ggplot(V_n3,aes(x="", y=porcentaje, fill=P12_6))+
              position = position_stack(vjust = 0.5),
              show.legend = FALSE) +
   guides(fill = guide_legend(title = "respuesta")) +
-  scale_fill_brewer(palette = "Accent") +
+  scale_fill_brewer(colors_list) +
   coord_polar(theta = "y") + 
   theme_void()
 
 g3
 
 # *****************************************Plotly 3 INICIO
+colors_list <- list(
+  "si" = "#B0E2FF",
+  "no" = "#FFD39B")
+
+V_n3$color <- dplyr::recode(V_n3$P12_6, !!!colors_list)
+
+# , opacity = rep(0.7, 7)))  
+
 
 p3 <- plot_ly(data = V_n3, labels = ~P12_6, values = ~n, type = 'pie',textinfo = "label+percent",
-              insidetextorientation = "radial")  %>% layout(title = 'Mujeres que SI GOLPEAN a sus hijos, ¿sufrieron insultos en su niñez?')
+              insidetextorientation = "radial", marker = list( colors = ~color))  %>% layout(title = 'Mujeres que GOLPEAN a sus hijos, ¿Fueron golpeadas en su niñez?')
 
 p3
 
+#Por si es necesario cambiar las fuentes del plotly
+# t <- list(
+#   family = "Calibri",
+#   size = 15,
+#   color = 'black')
+# 
+# p4 %>% layout(font=t, margin = list(b = 200, l = 100))
 
 # *****************************************Plotly 3 FIN
-
-
-
 
 
 #Mujeres no que golpean a sus hijos, tienen antecedentes de golpes hacía su persona en la niñez? no, 74 si 26
@@ -243,10 +263,17 @@ g4<-ggplot(V_n4,aes(x="", y=porcentaje, fill=P12_6))+
 g4
 
 # *****************************************Plotly 4 INICIO
+colors_list <- list(
+  "si" = "#B0E2FF",
+  "no" = "#FFD39B")
+
+V_n4$color <- dplyr::recode(V_n4$P12_6, !!!colors_list)
 
 p4 <- plot_ly(data = V_n4, labels = ~P12_6, values = ~n, type = 'pie',textinfo = "label+percent",
-              insidetextorientation = "radial")  %>% layout(title = 'Mujeres que SI GOLPEAN a sus hijos, ¿sufrieron insultos en su niñez?')
+              insidetextorientation = "radial", marker = list( colors = ~color))  %>% layout(title =  'Mujeres que NO GOLPEAN a sus hijos ¿Fueron golpeadas en su niñez?')
 
+
+p3
 p4
 # *****************************************Plotly 4 FIN
 
@@ -296,9 +323,15 @@ g5<-ggplot(V_n5,aes(x="", y=porcentaje, fill=P12_8))+
 g5
 
 # *****************************************Plotly 4 INICIO
+colors_list <- list(
+  "si" = "#B0E2FF",
+  "no" = "#FFD39B")
+
+V_n5$color <- dplyr::recode(V_n5$P12_8, !!!colors_list)
+
 
 p5 <- plot_ly(data = V_n5, labels = ~P12_8, values = ~n, type = 'pie',textinfo = "label+percent",
-              insidetextorientation = "radial")  %>% layout(title = 'Parejas de Mujeres que SI GOLPEAN a sus hijos, ¿sufrieron insultos en su niñez?')
+              insidetextorientation = "radial", marker = list( colors = ~color))  %>% layout(title = 'Parejas que GOLPEAN a sus hijos ¿Fueron golpeadas en su niñez?')
 
 p5
 
@@ -341,17 +374,37 @@ g6<-ggplot(V_n6,aes(x="", y=porcentaje, fill=P12_8))+
 g6
 
 # *****************************************Plotly 4 INICIO
+colors_list <- list(
+  "si" = "#B0E2FF",
+  "no" = "#FFD39B")
+
+V_n6$color <- dplyr::recode(V_n6$P12_8, !!!colors_list)
+
+
 
 p6 <- plot_ly(data = V_n6, labels = ~P12_8, values = ~n, type = 'pie',textinfo = "label+percent",
-              insidetextorientation = "radial")  %>% layout(title = 'Parejas de Mujeres que NO GOLPEAN a sus hijos, ¿sufrieron insultos en su niñez?')
+              insidetextorientation = "horizontal", marker = list( colors = ~color))  %>%
+  layout(title = 'Parejas que NO GOLPEAN a sus hijos ¿Fueron golpeadas en su niñez?', xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE)) 
 
 p6
+
+
+p1
+p2
+p3
+p4
+p5
+p6
+
+
+
+
 
 #GIFT
 #Base de datos línea Mujeres
 head(servicios_integrales_2019_2021)
 
-
 servicios_integrales_2019_2021 %>% 
   filter(estado_usuaria=="CIUDAD DE MÉXICO") %>% 
   group_by(fecha_alta, municipio_usuaria) %>% 
@@ -368,22 +421,7 @@ servicios_integrales_2019_2021 %>%
   transition_reveal(fecha_alta)
 
 
-
-servicios_integrales_2019_2021 %>% 
-  filter(estado_usuaria=="CIUDAD DE MÉXICO") %>% 
-  group_by(fecha_alta, municipio_usuaria) %>% 
-  count(municipio_usuaria, sort = TRUE) %>%
-  summarise(m=n)%>% 
-  ggplot(aes(x=fecha_alta,
-             y= m,
-             color= municipio_usuaria))+
-  geom_line()+
-  labs(title="No. de llamadas realizadas a Línea Mujeres agrupadas por Alcaldía \r\n 2019-2021
-       ",
-       x="\r\nFecha de llamada", 
-       y= "\r\nNúmero de llamdas recibidas por día")+
-  transition_reveal(fecha_alta)
-
+#Trelliscope linea mujeres casos diarios
 servicios_integrales_2019_2021 %>% 
   filter(estado_usuaria=="CIUDAD DE MÉXICO") %>% 
   group_by(fecha_alta, municipio_usuaria) %>% 
@@ -418,9 +456,9 @@ servicios_integrales_2019_2021 %>%
        x="\r\nFecha de llamada", 
        y= "\r\nNúmero de llamdas recibidas por día")
 
-#Serie de Tiempo "
+#Gráfico ggplot gam "
 llamadas_dia_gam<-servicios_integrales_2019_2021 %>% 
-  filter(estado_usuaria=="CIUDAD DE MÉXICO", municipio_usuaria=="GUSTAVO A. MADERO") %>% 
+  filter(estado_usuaria=="CIUDAD DE MÉXICO") %>% 
   group_by(fecha_alta, municipio_usuaria) %>% 
   count(municipio_usuaria, sort = TRUE) %>%
   mutate(m=n)
@@ -435,21 +473,4 @@ ggplot(llamadas_dia_gam, aes(x=fecha_alta,
  
 llamadas_dia_gam
 
-#c(2021,01,01)
-llamdg<-ts(llamadas_dia_gam$m, start=c(2019), frequency = 365)
-
-
-llamdg
-  
-ajuste<-auto.arima((y=llamdg))
-summary(ajuste)
-autoplot(llamdg)
-
-
-
-predicciones<-forecast(ajuste)
-min(predicciones[["lower"]])
-max(predicciones[["upper"]])
-p_predict<-autoplot(predicciones)
-p_predict
 

@@ -49,7 +49,7 @@ y
 
 
 # Rehaciendo la gráfica con la recta de regresión y el intercepto del año 2050
-ggplot(tipoderelacióncdmx, aes(x = año, y = unidas_casadas)) +
+rl<-ggplot(tipoderelacióncdmx, aes(x = año, y = unidas_casadas)) +
   theme_grey()+
   geom_point() + 
   scale_x_continuous("Año",limits = c(2000,2115)) + 
@@ -69,6 +69,6 @@ ggplot(tipoderelacióncdmx, aes(x = año, y = unidas_casadas)) +
                 label = "Intercepto y=27.392"),
             stat = "unique")+
   geom_text(aes(x = 2090, y = 0,
-                label = "Intercepto y=2096.27"),
+                label = "Intercepto x=2096.27"),
             stat = "unique")
-
+ggplotly(rl)
