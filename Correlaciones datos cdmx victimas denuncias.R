@@ -16,7 +16,7 @@ library(lubridate)
 ####Importar base de datos csv
 library(readr)
 file.choose()#buscar ruta del archivo csv
-ruta_csv <-"C:\\Users\\Miroslava\\Downloads\\denuncias-victimas-pgj.csv"
+ruta_csv <-"C:\\Users\\Miroslava\\Downloads\\denuncias-victimas-pgj (1).csv"
 denuncias_victimas_pgj<-read_csv(ruta_csv)
 
 
